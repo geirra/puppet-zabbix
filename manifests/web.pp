@@ -380,6 +380,12 @@ class zabbix::web (
           path     => '/api_jsonrpc.php',
           provider => 'location',
           require  => $location_api_access,
+          rewrites => [
+            {
+              rewrite_cond => '%{HTTP:Authorization} ^(.+)',
+              rewrite_rule => '.* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]',
+            },
+          ],
         },
       ],
       custom_fragment => $apache_vhost_custom_fragment,
